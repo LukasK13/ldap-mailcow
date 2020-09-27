@@ -20,26 +20,30 @@ A python script periodically checks and creates new LDAP accounts and deactivate
 2. Extend your `docker-compose.override.yml` with an additional container:
 
     ```yaml
-    ldap-mailcow:
-        image: programmierus/ldap-mailcow
+    version: '2.1'
+      ldap-mailcow:
+        build:
+          context: ./ldap-mailcow
         network_mode: host
         container_name: mailcowcustomized_ldap-mailcow
         depends_on:
-            - nginx-mailcow
+          - nginx-mailcow
         volumes:
-            - ./data/ldap:/db:rw
-            - ./data/conf/dovecot:/conf/dovecot:rw
-            - ./data/conf/sogo:/conf/sogo:rw
+          - ./data/ldap:/db:rw
+          - ./data/conf/dovecot:/conf/dovecot:rw
+          - ./data/conf/sogo:/conf/sogo:rw
         environment:
-            - LDAP-MAILCOW_LDAP_URI=ldap(s)://dc.example.local
-            - LDAP-MAILCOW_LDAP_BASE_DN=OU=Mail Users,DC=example,DC=local
-            - LDAP-MAILCOW_LDAP_BIND_DN=CN=Bind DN,CN=Users,DC=example,DC=local
-            - LDAP-MAILCOW_LDAP_BIND_DN_PASSWORD=BindPassword
-            - LDAP-MAILCOW_API_HOST=https://mailcow.example.local
-            - LDAP-MAILCOW_API_KEY=XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX
-            - LDAP-MAILCOW_SYNC_INTERVAL=300
-            - LDAP-MAILCOW_LDAP_FILTER=(&(objectClass=user)(objectCategory=person)(memberOf:1.2.840.113556.1.4.1941:=CN=Group,CN=Users,DC=example DC=local))
-            - LDAP-MAILCOW_SOGO_LDAP_FILTER=objectClass='user' AND objectCategory='person' AND memberOf:1.2.840.113556.1.4.1941:='CN=Group,CN=Users,DC=example DC=local'
+          - LDAP-MAILCOW_LDAP_HOST=ldap://ldaphost:389
+          - LDAP-MAILCOW_LDAP_BASE_DN=base dn for searching
+          - LDAP-MAILCOW_LDAP_BIND_DN=bind dn of your service user
+          - LDAP-MAILCOW_LDAP_BIND_DN_PASSWORD=bin password of your service user
+          - LDAP-MAILCOW_LDAP_FILTER=filter for your users
+          - LDAP-MAILCOW_LDAP_FIELDS_MAIL=mail
+          - LDAP-MAILCOW_LDAP_FIELDS_NAME=cn
+          - LDAP-MAILCOW_API_HOST=url of your mailcow instance
+          - LDAP-MAILCOW_API_KEY=mailcow api key
+          - LDAP-MAILCOW_API_SSL_VERIFY=1
+          - LDAP-MAILCOW_SYNC_INTERVAL=300
     ```
 
 3. Configure environmental variables:
