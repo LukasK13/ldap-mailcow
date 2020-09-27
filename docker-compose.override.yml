@@ -1,0 +1,26 @@
+version: '2.1'
+
+services:
+  ldap-mailcow:
+    build:
+      context: ./ldap-mailcow
+    network_mode: host
+    container_name: mailcowcustomized_ldap-mailcow
+    depends_on:
+      - nginx-mailcow
+    volumes:
+      - ./data/ldap:/db:rw
+      - ./data/conf/dovecot:/conf/dovecot:rw
+      - ./data/conf/sogo:/conf/sogo:rw
+    environment:
+      - LDAP-MAILCOW_LDAP_HOST=ldap://ldaphost:389
+      - LDAP-MAILCOW_LDAP_BASE_DN=base dn for searching
+      - LDAP-MAILCOW_LDAP_BIND_DN=bind dn of your service user
+      - LDAP-MAILCOW_LDAP_BIND_DN_PASSWORD=bin password of your service user
+      - LDAP-MAILCOW_LDAP_FILTER=filter for your users
+      - LDAP-MAILCOW_LDAP_FIELDS_MAIL=mail
+      - LDAP-MAILCOW_LDAP_FIELDS_NAME=cn
+      - LDAP-MAILCOW_API_HOST=url of your mailcow instance
+      - LDAP-MAILCOW_API_KEY=mailcow api key
+      - LDAP-MAILCOW_API_SSL_VERIFY=1
+      - LDAP-MAILCOW_SYNC_INTERVAL=300
