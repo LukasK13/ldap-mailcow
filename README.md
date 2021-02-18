@@ -13,7 +13,7 @@ A python script periodically checks and creates new LDAP accounts and deactivate
 
     ```yaml
     ldap-mailcow:
-        image: programmierus/ldap-mailcow
+        image: $IMAGEID #needs to be configured!
         network_mode: host
         container_name: mailcowcustomized_ldap-mailcow
         depends_on:
@@ -28,6 +28,7 @@ A python script periodically checks and creates new LDAP accounts and deactivate
             - LDAP-MAILCOW_LDAP_BIND_DN=CN=Bind DN,CN=Users,DC=example,DC=local
             - LDAP-MAILCOW_LDAP_BIND_DN_PASSWORD=BindPassword
             - LDAP-MAILCOW_LDAP_FILTER=(&(objectClass=user)(objectCategory=person))
+            - LDAP-MAILCOW_SOGO_LDAP_FILTER=objectClass='user' AND objectCategory='person'
             - LDAP-MAILCOW_LDAP_FIELDS_MAIL=userPrincipalName
             - LDAP-MAILCOW_LDAP_FIELDS_NAME=cn
             - LDAP-MAILCOW_API_HOST=https://mailcow.example.local
@@ -44,6 +45,7 @@ A python script periodically checks and creates new LDAP accounts and deactivate
     * `LDAP-MAILCOW_LDAP_BIND_DN` - bind DN of a special LDAP account that will be used to browse for users
     * `LDAP-MAILCOW_LDAP_BIND_DN_PASSWORD` - password for bind DN account
     * `LDAP-MAILCOW_LDAP_FILTER` - LDAP filter string to find users account
+    * `LDAP-MAILCOW_SOGO_LDAP_FILTER` - LDAP filter string to find users account for SoGo
     * `LDAP-MAILCOW_LDAP_FIELDS_MAIL` - LDAP user mail field
     * `LDAP-MAILCOW_LDAP_FIELDS_NAME` - LDAP user full name field
     * `LDAP-MAILCOW_API_HOST` - mailcow API url. Make sure it's enabled and accessible from within the container for both reads and writes

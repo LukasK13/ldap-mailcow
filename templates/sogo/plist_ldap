@@ -32,6 +32,9 @@
     <string>$ldap_host</string>
     <key>canAuthenticate</key>
     <string>YES</string>
+    
+    <key>filter</key>
+    <string>$sogo_ldap_filter</string>
 
     <key>isAddressBook</key>
     <string>NO</string>
